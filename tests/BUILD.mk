@@ -197,6 +197,27 @@ o/$(MODE)/tests/transcribefile_smoke.runs: \
 	@touch $@
 
 # ==============================================================================
+# Test: weight_residency_test (weight residency governor)
+# ==============================================================================
+#
+# Drives the page-accounting, hard/soft quota, lease, eviction and degradation
+# logic with injected fake WeightOps over an anonymous mapping, so it needs no
+# model file, GPU or filesystem access. Links weight_residency.o alone.
+
+WEIGHT_RESIDENCY_TEST_DEPS := \
+	o/$(MODE)/llamafile/weight_residency.o
+
+o/$(MODE)/tests/weight_residency_test.o: tests/weight_residency_test.cpp
+	@mkdir -p $(@D)
+	$(CXX) $(CXXFLAGS) $(TESTS_CPPFLAGS) -pthread -c -o $@ $<
+
+o/$(MODE)/tests/weight_residency_test: \
+		o/$(MODE)/tests/weight_residency_test.o \
+		$(WEIGHT_RESIDENCY_TEST_DEPS)
+	@mkdir -p $(@D)
+	$(CXX) $(LDFLAGS) -pthread -o $@ $^ $(LDLIBS)
+
+# ==============================================================================
 # Phony targets
 # ==============================================================================
 
@@ -206,4 +227,5 @@ o/$(MODE)/tests: \
 	o/$(MODE)/tests/fa_helpers_test.runs \
 	o/$(MODE)/tests/gpu_backend_test.runs \
 	o/$(MODE)/tests/sandbox_test.runs \
-	o/$(MODE)/tests/transcribefile_smoke.runs
+	o/$(MODE)/tests/transcribefile_smoke.runs \
+	o/$(MODE)/tests/weight_residency_test.runs

@@ -164,6 +164,7 @@ LLAMAFILE_SRCS_CPP := \
 	llamafile/image.cpp \
 	llamafile/llama.cpp \
 	llamafile/string.cpp \
+	llamafile/weight_residency.cpp \
 	llamafile/xterm.cpp \
 	$(LLAMAFILE_HIGHLIGHT_SRCS)
 
